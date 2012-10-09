@@ -5,11 +5,14 @@ material TextureOutput
     {
         pass                    
         {		
-			scene_blend src_alpha one_minus_src_alpha
-		
+			scene_blend add
+			//scene_blend src_alpha one_minus_src_alpha	
+			//scene_blend src_alpha dest_alpha	
+			//separate_scene_blend one zero src_alpha one_minus_src_alpha
+			
             texture_unit
             {				
-				filtering bilinear
+				//filtering bilinear
             }
         }
     }
