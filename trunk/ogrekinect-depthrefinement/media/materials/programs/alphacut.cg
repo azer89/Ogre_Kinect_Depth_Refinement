@@ -23,10 +23,8 @@ void main_fp
         out float4 color    		: COLOR
 	)
 {
-	float4 col = tex2D(_imagetex, float2(uv0.x, uv0.y));
-	
+	float4 col = tex2D(_imagetex, float2(uv0.x, uv0.y));	
 	if(col[3] <= _cutoff) col = float4(col.xyz, 0.0);
 	else if(_cutoff != 0.0) col = float4(col.xyz, 1.0);
-
 	color = col;
 }
