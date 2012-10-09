@@ -1,0 +1,50 @@
+
+
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+void main_fp
+	(
+		uniform sampler2D _imagetex 	: register(s0),
+		uniform sampler2D _densitytex	: register(s1),
+		float2 uv0						: TEXCOORD0,
+        out float4 color    			: COLOR
+	)
+{
+	float densityDist1 = length(tex2D(_densitytex, uv0));
+	float densityDist2 = 0.0;
+	float4 col1 = tex2D(_imagetex, uv0);
+	float4 col2 = float4(0.0);
+	float dist = 1000.0;
+	float d = 1000.0;
+								
+	for(int xIter = 0; xIter < 5; xIter++)
+	{
+		for(int yIter = 0; yIter < 5; yIter++)
+		{						
+			float2 uvCoord = uv0 + float2((xIter - 2) / 640.0, (yIter - 2) / 480.0);						
+			col2 = tex2D(_imagetex, uvCoord);
+			densityDist2 = length(tex2D(_densitytex, uvCoord));						
+			d = distance(col1, col2);
+						
+			if(densityDist2 > densityDist1 && d < dist)
+			{
+				densityDist1 = densityDist2;
+				dist = d;
+				col1 = col2;
+			}
+		}
+	}
+	
+	color = col1;
+}

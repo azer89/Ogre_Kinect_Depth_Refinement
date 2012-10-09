@@ -1,0 +1,26 @@
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+void main_fp
+	(
+		uniform float _blendvalue,
+		uniform sampler2D _imagetex	: register(s0),
+		uniform sampler2D _oldtex	: register(s1),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	float4 one = tex2D(_imagetex, uv0);
+	float4 two = tex2D(_oldtex, uv0);
+	color = _blendvalue * one + (1.0 - _blendvalue) * two;
+}

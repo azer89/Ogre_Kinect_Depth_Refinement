@@ -1,0 +1,64 @@
+
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+ 
+void main_fp
+	(
+		uniform float domain_sigma,
+		uniform float range_sigma,
+		uniform sampler2D _imagetex	: register(s0),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{	
+
+	float d_sigma2 = domain_sigma * domain_sigma;  
+	float d_sigma2_2 = d_sigma2 * 2.0;
+	float d_sigma2_2_pi = d_sigma2_2 * 3.1415926;
+	float r_sigma2 = range_sigma * range_sigma;
+				
+	float3 c1 = tex2D(_imagetex, uv0).xyz;
+				
+	float3 colorSum  = float3(0.0);
+	float3 sum = float3(0.0);
+	float3 val = float3(0.0);
+				
+	float3 inten = float3(0.0);
+	float3 c2 = float3(0.0);
+	float dist = 0.0;
+	float3 colorDif = float3(0.0);
+				
+	for(int xIter = 0; xIter < 5; xIter++)
+	{
+		for(int yIter = 0; yIter < 5; yIter++)
+		{
+			float2 uvCoord = float2((xIter - 2) / 640.0, (yIter - 2) / 480.0);
+			c2 = tex2D(_imagetex, uv0 + uvCoord).xyz;
+			dist = length(float2(xIter, yIter));
+			colorDif = c1 - c2;
+						
+			inten = exp(-1.0 * dist / d_sigma2_2) /
+				d_sigma2_2_pi * 
+				exp( (-1.0 * colorDif * colorDif/ r_sigma2));
+						
+			sum += inten ;
+			colorSum += inten * c2;						
+		}
+	}
+				
+	val = colorSum / sum;
+				
+	color = float4(val, 1.0);
+	
+}
+

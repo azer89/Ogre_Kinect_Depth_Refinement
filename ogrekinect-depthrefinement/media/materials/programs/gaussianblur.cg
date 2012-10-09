@@ -1,0 +1,61 @@
+
+//-------------------------------------------------------------------------------------
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+
+//-------------------------------------------------------------------------------------
+float4 Gaussian1D9x9(in sampler2D source,
+					 in float2 center,
+					 in float2 direction,
+					 in float2 dimension) 
+{
+	float offset9x9[3] = {0.0, 1.3846153846, 3.2307692308};
+	float weight9x9[3] = {0.2270270270, 0.3162162162, 0.0702702703};
+
+	float4 col = tex2D(source, center);
+	float4 blended_color = col * weight9x9[0];
+	
+	//return blended_color;
+    for (int i=1; i<3; ++i) 
+	{
+        blended_color += tex2D(source, center + (offset9x9[i] * direction /dimension)) * weight9x9[i];
+        blended_color += tex2D(source, center - (offset9x9[i] * direction /dimension)) * weight9x9[i];
+    }
+	
+	return blended_color;
+}
+
+//-------------------------------------------------------------------------------------
+void main_x_fp
+	(
+		uniform sampler2D _imagetex	: register(s0),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	
+	color = Gaussian1D9x9(_imagetex, uv0, float2(1, 0), float2(640.0, 480.0));
+}
+
+//-------------------------------------------------------------------------------------
+void main_y_fp
+	(
+		uniform sampler2D _imagetex	: register(s0),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	
+	color = Gaussian1D9x9(_imagetex, uv0, float2(0, 1), float2(640.0, 480.0));
+}

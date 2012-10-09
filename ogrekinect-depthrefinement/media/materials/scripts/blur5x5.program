@@ -1,0 +1,23 @@
+
+vertex_program Blur5x5_Main_VS cg            
+{
+    source blur5x5.cg	
+    entry_point main_vp
+    profiles vs_3_0 
+
+    default_params
+    {	
+        param_named_auto worldViewProj worldviewproj_matrix    
+    }
+}
+
+fragment_program Blur5x5_Main_PS cg
+{    
+    source blur5x5.cg  
+    entry_point main_fp 
+    profiles ps_3_0   
+
+	//default_params
+    //{
+	//}
+}

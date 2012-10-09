@@ -1,0 +1,33 @@
+
+//-------------------------------------------------------------------------------------
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+//-------------------------------------------------------------------------------------
+void main_fp
+	(
+		uniform float _cutoff,
+		uniform sampler2D _imagetex : register(s0),
+		uniform sampler2D _rgbtex 	: register(s1),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	float4 col = tex2D(_imagetex, uv0);
+	float4 rgbcol = tex2D(_rgbtex, uv0);
+	
+	if(col[3] <= _cutoff) col = float4(col.xyz, 0.0);
+	else if(_cutoff != 0.0) col = float4(rgbcol.xyz, 1.0);
+
+	color = col;
+}

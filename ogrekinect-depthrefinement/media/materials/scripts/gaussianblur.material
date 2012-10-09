@@ -1,0 +1,36 @@
+
+material GaussianBlurXMaterial
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref GaussianBlur_Main_VS { }            
+            fragment_program_ref GaussianBlurX_Main_PS  { }
+			
+            texture_unit
+            {
+                tex_address_mode clamp
+				filtering bilinear
+            }
+        }
+    }
+}
+
+material GaussianBlurYMaterial
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref GaussianBlur_Main_VS { }            
+            fragment_program_ref GaussianBlurY_Main_PS  { }
+			
+            texture_unit
+            {
+                tex_address_mode clamp
+				filtering bilinear
+            }
+        }
+    }
+}

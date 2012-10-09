@@ -1,0 +1,19 @@
+
+
+material Bilateral5x5Material
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref Bil5x5_Main_VS { }            
+            fragment_program_ref Bil5x5_Main_PS  { }
+			
+            texture_unit
+            {
+                tex_address_mode clamp
+				//filtering none
+            }
+        }
+    }
+}

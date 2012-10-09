@@ -1,0 +1,40 @@
+
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+void main_fp
+	(
+		uniform sampler2D _imagetex	: register(s0),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	float _width = 640;
+	float _height = 480;
+	
+	float4 sum = float4(0.0);
+	
+	
+	for(int xiter = 0; xiter < 5; xiter++)
+    {
+		for(int yiter = 0; yiter < 5; yiter++)
+		{
+			float xindex = (xiter * 2 + 1 - 5) / _width;
+			float yindex = (yiter * 2 + 1 - 5) / _height;			
+			sum += tex2D(_imagetex, float2(uv0.x + xindex, uv0.y + yindex));
+		}
+	}
+	
+	sum /= 25.0;
+	color = sum;
+}

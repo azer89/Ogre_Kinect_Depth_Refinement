@@ -1,0 +1,43 @@
+
+void main_vp
+	(
+        float4 position			: POSITION,
+        float2 texCoord0		: TEXCOORD0, 
+        out float4 oPosition    : POSITION,
+        out float2 uv0			: TEXCOORD0, 
+        uniform float4x4 worldViewProj
+	)
+{
+    oPosition = mul(worldViewProj, position);
+    uv0 = texCoord0;
+}
+
+void main_fp
+	(
+		uniform float _sigma,
+		uniform sampler2D _imagetex	: register(s0),
+		float2 uv0					: TEXCOORD0,
+        out float4 color    		: COLOR
+	)
+{
+	float _sigma2_2 = _sigma * _sigma * 2.0;				
+				
+	float3 accumDensity = float3(0.0); 
+	float3 density1 = tex2D(_imagetex, uv0).xyz;
+	float3 density2 = float3(0.0);
+				
+	for(int xIter = 0; xIter < 7; xIter++)
+	{
+		for(int yIter = 0; yIter < 7; yIter++)
+		{
+			float2 uvCoord = float2((xIter - 3) / 640.0, (yIter - 3) / 480.0);						    
+			density2 = tex2D(_imagetex, uv0 + uvCoord).xyz;								
+			float3 diff = density1 - density2;						
+			float3 inten = 	exp(-1 * diff * diff / _sigma2_2);
+			accumDensity += inten;
+		}
+	}
+				
+	accumDensity /= (_sigma2_2 * 3.14159 * 49.0);
+	color = float4(accumDensity, 1.0);
+}

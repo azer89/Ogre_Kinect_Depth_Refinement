@@ -1,0 +1,79 @@
+
+
+compositor DepthRefinement/Usermap
+{
+	technique
+	{
+		texture scene	target_width target_height PF_A8R8G8B8
+		texture buffer	target_width target_height PF_A8R8G8B8 chain_scope		
+		texture rt0		target_width target_height PF_A8R8G8B8 chain_scope
+		//texture rt1		target_width target_height PF_A8R8G8B8
+		//texture rt2		target_width target_height PF_A8R8G8B8
+    
+		target scene
+		{
+			input previous
+		}
+	
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material Blur5x5Material
+				input 0 scene
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material Blur5x5Material
+				input 0 rt0
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material AccumulatorMaterial
+				input 0 rt0
+				input 1 buffer
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material AlphacutRGBMaterial
+				input 0 rt0
+			}
+		}
+		
+		target buffer
+		{
+			input none			
+			pass render_quad
+			{
+				material NoEffectMaterial
+				input 0 rt0
+			}
+		}
+		
+		target_output
+        {
+			input none			
+			pass render_quad
+			{
+				material TextureOutput
+				input 0 rt0
+			}
+		}
+	}
+}

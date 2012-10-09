@@ -1,0 +1,23 @@
+
+material AlphacutRGBMaterial
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref AlphacutRGB_Main_VS { }            
+            fragment_program_ref AlphacutRGB_Main_PS  { }
+			
+            texture_unit
+            {
+                tex_address_mode clamp
+            }
+			
+			texture_unit
+            {
+				texture Aligned_RGB_Texture
+                tex_address_mode clamp
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+
+
+material Blur5x5Material
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref Blur5x5_Main_VS { }            
+            fragment_program_ref Blur5x5_Main_PS  { }
+			
+            texture_unit
+            {
+                //tex_address_mode clamp
+				filtering bilinear
+            }
+        }
+    }
+}
