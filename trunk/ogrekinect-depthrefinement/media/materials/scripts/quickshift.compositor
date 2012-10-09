@@ -1,0 +1,142 @@
+
+
+compositor DepthRefinement/QuickShift
+{
+	
+	technique
+	{
+		texture scene	target_width target_height PF_A8R8G8B8 
+		texture density	target_width target_height PF_A8R8G8B8 
+		texture rt0		target_width target_height PF_A8R8G8B8	
+		
+		target scene
+		{
+			input previous
+		}
+		
+		// 1ST LOOP
+		
+		target density
+		{
+			input none			
+			pass render_quad
+			{
+				material Density7x7Material
+				input 0 scene
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material QuickShiftMaterial
+				input 0 scene
+				input 1 density
+			}
+		}
+		
+		// 2ND LOOP
+		
+		target density
+		{
+			input none			
+			pass render_quad
+			{
+				material Density7x7Material
+				input 0 rt0
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material QuickShiftMaterial
+				input 0 rt0
+				input 1 density
+			}
+		}
+		
+		// 3RD LOOP
+		
+		target density
+		{
+			input none			
+			pass render_quad
+			{
+				material Density7x7Material
+				input 0 rt0
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material QuickShiftMaterial
+				input 0 rt0
+				input 1 density
+			}
+		}
+		
+		// 4TH LOOP
+		
+		target density
+		{
+			input none			
+			pass render_quad
+			{
+				material Density7x7Material
+				input 0 rt0
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material QuickShiftMaterial
+				input 0 rt0
+				input 1 density
+			}
+		}
+		
+		// 5TH LOOP
+		
+		target density
+		{
+			input none			
+			pass render_quad
+			{
+				material Density7x7Material
+				input 0 rt0
+			}
+		}
+		
+		target rt0
+		{
+			input none			
+			pass render_quad
+			{
+				material QuickShiftMaterial
+				input 0 rt0
+				input 1 density
+			}
+		}
+		
+		target_output
+		{
+			input none			
+			pass render_quad
+			{
+				material TextureOutput
+				input 0 rt0
+			}
+		}
+	}
+}

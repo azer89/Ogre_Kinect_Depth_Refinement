@@ -1,0 +1,49 @@
+
+compositor DepthRefinement/BilateralFilter
+{
+	technique
+	{
+		texture scene target_width target_height PF_A8R8G8B8		
+		texture rt0 target_width target_height PF_A8R8G8B8
+		texture rt1 target_width target_height PF_A8R8G8B8
+    
+		target scene
+		{
+			input previous
+		}
+	
+		target rt0
+		{
+			input none
+			
+			pass render_quad
+			{
+				material Bilateral5x5Material
+				input 0 scene
+			}
+		}
+		
+		target rt1
+		{
+			input none
+			
+			pass render_quad
+			{
+				material Bilateral5x5Material
+				input 0 rt0
+			}
+		}
+		
+		target_output
+        {
+			input none
+			
+			pass render_quad
+			{
+				material TextureOutput
+				input 0 rt1
+			}
+		}
+	}
+}
+

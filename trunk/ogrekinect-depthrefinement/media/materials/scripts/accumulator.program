@@ -1,0 +1,25 @@
+
+
+vertex_program Accumulator_Main_VS cg            
+{
+    source accumulator.cg	
+    entry_point main_vp
+    profiles vs_3_0 
+
+    default_params
+    {	
+        param_named_auto worldViewProj worldviewproj_matrix    
+    }
+}
+
+fragment_program Accumulator_Main_PS cg
+{    
+    source accumulator.cg  
+    entry_point main_fp 
+    profiles ps_3_0   
+
+	default_params
+    {
+		param_named _blendvalue float 0.7
+	}
+}

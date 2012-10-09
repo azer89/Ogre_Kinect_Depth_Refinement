@@ -1,0 +1,25 @@
+
+
+vertex_program AlphacutRGB_Main_VS cg            
+{
+    source alphacutrgb.cg	
+    entry_point main_vp
+    profiles vs_3_0 
+
+    default_params
+    {	
+        param_named_auto worldViewProj worldviewproj_matrix    
+    }
+}
+
+fragment_program AlphacutRGB_Main_PS cg
+{    
+    source alphacutrgb.cg  
+    entry_point main_fp 
+    profiles ps_3_0   
+
+	default_params
+    {
+		param_named _cutoff float 0.6
+	}
+}
