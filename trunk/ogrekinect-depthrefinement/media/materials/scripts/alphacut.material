@@ -1,0 +1,20 @@
+
+
+
+material AlphacutMaterial
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref Alphacut_Main_VS { }            
+            fragment_program_ref Alphacut_Main_PS  { }
+			
+            texture_unit
+            {
+                //tex_address_mode clamp
+				filtering bilinear
+            }
+        }
+    }
+}

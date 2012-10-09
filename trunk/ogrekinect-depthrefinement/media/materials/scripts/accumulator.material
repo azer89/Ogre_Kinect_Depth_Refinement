@@ -1,0 +1,24 @@
+
+material AccumulatorMaterial
+{
+    technique                    
+    {
+        pass                    
+        {
+            vertex_program_ref Accumulator_Main_VS { }            
+            fragment_program_ref Accumulator_Main_PS  { }
+			
+            texture_unit
+            {
+                //tex_address_mode clamp
+				filtering bilinear
+            }
+			
+			texture_unit
+            {
+                //tex_address_mode clamp
+				filtering bilinear
+            }
+        }
+    }
+}
