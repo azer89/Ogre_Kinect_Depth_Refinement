@@ -11,12 +11,14 @@ material AlphacutRGBMaterial
             texture_unit
             {
                 tex_address_mode clamp
+				filtering bilinear
             }
 			
 			texture_unit
             {
 				texture Aligned_RGB_Texture
                 tex_address_mode clamp
+				filtering bilinear
             }
         }
     }
